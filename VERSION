@@ -1,0 +1,9 @@
+This starter package zip was published on Tue Dec 20 16:28:46 MSK 2011.
+
+Last change on this starter package was:
+commit 70bcf13a559d6894cca2cb88ecc6b8f460356360
+Date:   Wed Nov 9 10:30:08 2011 +0100
+
+    Fix Java/CoffeeScript bugs when input chunks end in the middle of a line.
+
+Check https://github.com/aichallenge/aichallenge/tree/epsilon/ants/dist/starter_bots/coffeescript for new versions.
