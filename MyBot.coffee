@@ -22,4 +22,9 @@ class Bot
           orders[near_square.x + "," + near_square.y] = true
           break
 
+  # Routine functions
+  free_direction: (x, y, directions=null) ->
+    true
+
+
 ants.run new Bot()
