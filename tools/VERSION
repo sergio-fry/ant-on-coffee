@@ -1,0 +1,9 @@
+This tools package was published on Tue Dec 20 18:05:01 UTC 2011.
+
+Last change in the ants/ folder was:
+commit 557ecda34e4fbbfa083811573ee6997dd2f5e7ac
+Date:   Tue Dec 20 18:48:38 2011 +0100
+
+    Skip onkeydown event when an input element got focus (fixes #360)
+
+Check https://github.com/aichallenge/aichallenge/ants/ for new versions.
