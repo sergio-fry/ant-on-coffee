@@ -23,11 +23,16 @@ class Bot
           break
 
   # Routine functions
+  nearest_food_for_ant: (x, y) ->
+    @ants.distance({ x: x, y: y }, food) for food in @ants.food()
+
+
   is_next_step_position_free: (x, y) =>
     !@positions[x + "," + y]?
 
   occupie_next_step_position: (x, y) =>
     @positions[x + "," + y] = true
+
 
 
 (exports ? this).Bot = Bot
