@@ -130,7 +130,7 @@ class Game
     @MAP.search (_) -> _.type is LAND_TYPES.HILL and _.owner is 0
 
   # any location which is not water is passable
-  passable: (x, y) -> @MAP[x][y].type isnt LAND_TYPES.WATER
+  passable: (loc) -> @MAP[loc.x][loc.y].type isnt LAND_TYPES.WATER
 
   # Puts orders for the ant at MAP[x][y] to head to one of 'N','E','S','W'
   issue_order: (x, y, direction) ->
