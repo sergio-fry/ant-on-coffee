@@ -13,9 +13,18 @@ class Bot
     @moves = {}
 
     my_ants = @ants.my_ants()
-    ant_targets = ( { ant: ant, target: @nearest_food_for_ant(ant) } for ant in my_ants when @nearest_food_for_ant(ant)?).sort (el) => -@ants.distance(el.ant, el.target)
-    ant_targets = ant_targets.concat({ ant: ant, target: ant } for ant in my_ants)
-    console.log ant_targets
+    all_food = @ants.food()
+    if all_food.length * my_ants.length > 0
+      ant_targets = []
+      ant_targets.push({ ant: ant, target: food }) for ant in my_ants for food in all_food
+      #console.log (el) for el in ant_targets
+      #console.log ("#{el.ant.x},#{el.ant.y} -> #{el.target.x},#{el.target.y}") for el in ant_targets
+      ant_targets = ant_targets.sort (el) => @ants.distance(el.ant, el.target)
+      ant_targets = ant_targets.concat({ ant: ant, target: ant } for ant in my_ants)
+    else
+      ant_targets = []
+
+    #console.log "#{target.ant.x},#{target.ant.y} -> #{target.target.x},#{target.target.y} (dist: #{@ants.distance(target.ant, target.target)})" for target in ant_targets
 
     targets = {}
     ants_with_orders = {}
@@ -32,11 +41,5 @@ class Bot
         @ants.issue_order(ant.x, ant.y, dir)
         @moves[near_square] = true
 
-
-  # Routine functions
-  nearest_food_for_ant: (ant) ->
-    if @ants.food().length > 0
-      food = ([food, @ants.distance(ant, food)] for food in @ants.food())
-      food.sort((el) -> -el[1])[0][0] # first food in array sorted by distance
 
 (exports ? this).Bot = Bot
