@@ -165,7 +165,7 @@ class Game
   # It will return a direction ('N', 'E', 'W', 'S') for heading from
   # source towards destination (both being Location objects)
   # I have just ported the function from the Python starter bot.
-  direction: (source, destination) ->
+  directions: (source, destination) ->
     [x1, y1, x2, y2] = [source.x, source.y, destination.x, destination.y]
     half_height = parseInt(CONFIG.rows / 2)
     half_width  = parseInt(CONFIG.cols / 2)
