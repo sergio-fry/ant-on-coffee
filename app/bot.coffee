@@ -4,7 +4,9 @@ directions = ['N', 'E', 'S', 'W']
 
 class Bot
   class LocationsCollection
-    constructor: (@collection={}) ->
+    constructor: (locations=[]) ->
+      @collection = {}
+      @add_loc(loc) for loc in locations
 
     add_loc: (loc) ->
       @collection["#{loc.x};#{loc.y}"] = true
@@ -27,7 +29,7 @@ class Bot
     if all_food.length * my_ants.length > 0
       ant_targets = []
       ant_targets.push({ ant: ant, target: food }) for ant in my_ants for food in all_food
-      ant_targets = ant_targets.sort (el) => -@ants.distance(el.ant, el.target)
+      ant_targets = ant_targets.sort (a, b) => @ants.distance(a.ant, a.target) - @ants.distance(b.ant, b.target)
     else
       ant_targets = []
 
@@ -48,12 +50,13 @@ class Bot
         @targets.add_loc target
         
   is_order_allowed: (ant, dest) ->
-    not @moves.has_loc(dest) && not @ants_with_orders.has_loc(ant)
+    not @moves.has_loc(dest) && not @ants_with_orders.has_loc(ant) && (not @my_ants.has_loc(dest) || (ant.x == dest.x && ant.y == dest.y))
 
   init_collections: ->
     @moves = new LocationsCollection()
     @targets = new LocationsCollection()
     @ants_with_orders = new LocationsCollection()
+    @my_ants = new LocationsCollection(@ants.my_ants())
 
 
 (exports ? this).Bot = Bot

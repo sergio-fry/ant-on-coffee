@@ -31,7 +31,15 @@ describe 'Bot', ->
 
   describe '#is_order_allowed', ->
     it 'should allow to stay', ->
+      game.my_ants = -> [{ x: 1, y: 1 }]
+      bot.init_collections()
       expect(bot.is_order_allowed({ x: 1, y: 1 }, { x: 1, y: 1 })).toBeTruthy()
+
+    it "should not allow to move over another ant", ->
+      game.my_ants = -> [{ x: 1, y: 1 }, { x: 1, y: 2 }]
+      bot.init_collections()
+      expect(bot.is_order_allowed({ x: 1, y: 1 }, { x: 1, y: 2 })).toBeFalsy()
+
 
     it 'should allow to move', ->
       expect(bot.is_order_allowed({ x: 1, y: 1 }, { x: 1, y: 2 })).toBeTruthy()
