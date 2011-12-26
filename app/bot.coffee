@@ -54,7 +54,6 @@ class Bot
 
   go_away_from_a_hill: ->
     for hill in @ants.my_hills()
-      console.log "hill found"
       for ant in @ants.my_ants()
         if (hill.x == ant.x && hill.y == ant.y)
           for direction in DIRECTIONS

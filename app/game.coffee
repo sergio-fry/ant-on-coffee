@@ -72,6 +72,8 @@ class Game
       if lines[lines.length-1] != ""
         partialline = lines[lines.length-1]
         lines = lines[0...lines.length-1]
+
+      @HILLS = []
       for line in lines
         state = @parse line.trim()
         switch state
@@ -106,6 +108,7 @@ class Game
           @MAP.seen_water.push water
         when "h"
           @MAP[x][y] = new Hill data
+          @HILLS.push new Hill data
         when "a"
           @MAP[x][y] = new Ant data
         when "d"
@@ -127,7 +130,10 @@ class Game
   enemy_hills: ->
     @MAP.search (_) -> _.type is LAND_TYPES.HILL and _.owner isnt 0
   my_hills: ->
-    @MAP.search (_) -> _.type is LAND_TYPES.HILL and _.owner is 0
+    if @HILLS?
+      hill for hill in @HILLS when hill.owner is 0
+    else
+      []
 
   # any location which is not water is passable
   passable: (loc) -> @MAP[loc.x][loc.y].type isnt LAND_TYPES.WATER
