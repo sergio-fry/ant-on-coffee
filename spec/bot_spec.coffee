@@ -63,3 +63,19 @@ describe 'Bot', ->
       game.issue_order = jasmine.createSpy()
       bot.do_turn()
       expect(game.issue_order.callCount).toEqual(2)
+  
+  describe "#go_away_from_a_hill", ->
+    it "should issue an order to go away for an ant on a hill", ->
+      game.my_ants = -> [{ x: 1, y: 1 }]
+      game.my_hills = -> [{ x: 1, y: 1 }]
+      game.issue_order = jasmine.createSpy()
+      bot.go_away_from_a_hill()
+      expect(game.issue_order.callCount).toEqual(1)
+
+    it "should issue an order to go away", ->
+      game.my_ants = -> [{ x: 1, y: 1 }]
+      game.my_hills = -> [{ x: 1, y: 2 }]
+      game.issue_order = jasmine.createSpy()
+      bot.go_away_from_a_hill()
+      expect(game.issue_order.callCount).toEqual(0)
+
