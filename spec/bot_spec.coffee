@@ -79,3 +79,9 @@ describe 'Bot', ->
       bot.go_away_from_a_hill()
       expect(game.issue_order.callCount).toEqual(0)
 
+
+  describe "#find_path", ->
+    it "should find path of length 1", ->
+      path = bot.find_path({ x: 1, y: 1 }, { x: 1, y: 2})
+      expect(path.length).toEqual(1)
+

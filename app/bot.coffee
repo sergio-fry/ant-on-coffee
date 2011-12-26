@@ -71,4 +71,25 @@ class Bot
     @my_ants = new LocationsCollection(@ants.my_ants())
 
 
+  # http://xathis.com/posts/ai-challenge-2011-ants.html
+  # http://www.csc.liv.ac.uk/~cs8js/4yp/BFS.html
+  find_path: (ant, dest) ->
+    queue = []
+    explored_tiles = []
+
+    queue.push(ant)
+
+    if ant.x == dest.x && ant.y == dest.y
+      []
+    else
+      while queue.length > 0
+        root_tile = queue.shift()
+
+        neighbors = @ants.neighbor(root_tile, direction) for direction in DIRECTIONS when @ants.passable(@ants.neighbor(root_tile, direction))
+
+        
+      [dest]
+
+
+
 (exports ? this).Bot = Bot
