@@ -6,14 +6,26 @@ class Bot
   class LocationsCollection
     constructor: (locations=[]) ->
       @collection = {}
+      @collection_array = []
       @add_loc(loc) for loc in locations
 
     add_loc: (loc) ->
-      @collection["#{loc.x};#{loc.y}"] = true
+      @collection_array.push loc
+      @collection["#{loc.x};#{loc.y}"] = loc
 
     has_loc: (loc) ->
-      @collection["#{loc.x};#{loc.y}"]?
+      if @collection[@key(loc)]?
+        @collection[@key(loc)]
+      else
+        false
 
+    remove_loc: (loc) ->
+      if origin = @has_loc(loc)
+        delete @collection_array[@collection_array.indexOf(origin)]
+        delete @collection[@key(loc)]
+
+    key: (loc) ->
+      "#{loc.x};#{loc.y}"
 
   constructor: (@ants) ->
 
@@ -74,22 +86,48 @@ class Bot
   # http://xathis.com/posts/ai-challenge-2011-ants.html
   # http://www.csc.liv.ac.uk/~cs8js/4yp/BFS.html
   find_path: (ant, dest) ->
-    queue = []
-    explored_tiles = []
+    path = null
 
-    queue.push(ant)
+    my_hills = new LocationsCollection(@ants.my_hills())
+    queue = [{ x: ant.x, y: ant.y, cost: 0 }]
+    explored_tiles = new LocationsCollection()
 
-    if ant.x == dest.x && ant.y == dest.y
-      []
-    else
-      while queue.length > 0
-        root_tile = queue.shift()
+    explored_tiles_by_cost = { "0": [ant] }
+    path_cost = null
 
-        neighbors = @ants.neighbor(root_tile, direction) for direction in DIRECTIONS when @ants.passable(@ants.neighbor(root_tile, direction))
+    while queue.length > 0
+      root_tile = queue.shift()
+      explored_tiles.add_loc root_tile
 
-        
-      [dest]
+      unless root_tile.x == dest.x && root_tile.y == dest.y
+        for direction in DIRECTIONS
+          neighbor = @ants.neighbor(root_tile.x, root_tile.y, direction)
+          neighbor = { x: neighbor.x, y: neighbor.y, cost: root_tile.cost + 1 }
+          if (root_tile.cost < 10) and !explored_tiles.has_loc(neighbor) and !my_hills.has_loc(neighbor) and @ants.passable(neighbor)
+            queue.push neighbor
+      else
+        path_cost = root_tile.cost
+        break
 
+    if path_cost == 0
+      path = []
+    else if path_cost == 1
+      path = [dest]
+    else if path_cost > 1
+      path = [dest]
+      current_tile = dest
+      for cost in [path_cost-1..1]
+        for tile in explored_tiles.collection_array when tile?
+          if tile.cost == cost
+            if @ants.distance(tile, current_tile) == 1
+              path.push tile
+              current_tile = tile
+
+            explored_tiles.remove_loc tile
+          
+      path = path.reverse()
+
+    path
 
 
 (exports ? this).Bot = Bot

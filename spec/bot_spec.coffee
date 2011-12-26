@@ -81,7 +81,35 @@ describe 'Bot', ->
 
 
   describe "#find_path", ->
+    ######################################################
+    # without unpassable tiles
+    it "should find path of length 0", ->
+      path = bot.find_path({ x: 1, y: 1 }, { x: 1, y: 1})
+      expect(path.length).toEqual(0)
+
     it "should find path of length 1", ->
       path = bot.find_path({ x: 1, y: 1 }, { x: 1, y: 2})
       expect(path.length).toEqual(1)
+
+    it "should find path of length 2", ->
+      path = bot.find_path({ x: 1, y: 1 }, { x: 2, y: 2})
+      expect(path.length).toEqual(2)
+
+    ######################################################
+    # with unpassable tiles
+    it "should find path of length 4", ->
+      game.passable = (loc) ->
+        if loc.x == 1 and loc.y == 2
+          false
+        else
+          true
+
+      path = bot.find_path({ x: 1, y: 1 }, { x: 1, y: 3})
+      expect(path.length).toEqual(4)
+
+    it "should return null if no route", ->
+      game.passable = (loc) -> false
+
+      path = bot.find_path({ x: 1, y: 1 }, { x: 1, y: 3})
+      expect(path).toEqual(null)
 
