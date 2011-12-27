@@ -113,3 +113,11 @@ describe 'Bot', ->
       path = bot.find_path({ x: 1, y: 1 }, { x: 1, y: 3})
       expect(path).toEqual(null)
 
+  describe "#distance", ->
+    it "should return length of path", ->
+      bot.find_path = -> [1..5]
+      expect(bot.distance({ x: 1, y: 1 }, { x: 1, y: 4 })).toEqual(5)
+
+    it "should return Infinity if there is no path", ->
+      bot.find_path = -> null
+      expect(bot.distance({ x: 1, y: 1 }, { x: 1, y: 4 })).toEqual(Infinity)
