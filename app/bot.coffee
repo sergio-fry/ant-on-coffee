@@ -36,6 +36,7 @@ class Bot
     @init_collections()
     @search_food()
     @go_away_from_a_hill()
+    @go_away_from_other_ants()
 
   move_ant: (ant, target) ->
     path = null
@@ -82,9 +83,27 @@ class Bot
             @move_ant(ant, @ants.neighbor(ant.x, ant.y, direction))
 
   go_away_from_other_ants: ->
+    my_ants = @ants.my_ants()
+    for ant in my_ants
+      for another_ant in my_ants
+        neighbors = []
+        for direction in DIRECTIONS
+          neighbors.push @ants.neighbor(ant.x, ant.y, direction)
+        
+        neighbors = (neighbors.sort (a, b) => @freedom(b) - @freedom(a))
+        @move_ant(ant, neighbor) for neighbor in neighbors
+
         
   #########################################################
   # Routine methods
+
+  # describes free space from ather friendly ants
+  freedom: (loc) ->
+    my_ants = @ants.my_ants()
+    distance = 0
+    distance += @distance(loc, ant) for ant in my_ants
+
+    distance
 
   distance: (loc, dest) ->
     path = @find_path(loc, dest)
@@ -139,8 +158,6 @@ class Bot
       else
         path_cost = root_tile.cost
         break
-
-    #console.log max_queue_length
 
     if path_cost == 0
       path = []

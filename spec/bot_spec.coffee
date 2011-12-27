@@ -79,6 +79,22 @@ describe 'Bot', ->
       bot.go_away_from_a_hill()
       expect(game.issue_order.callCount).toEqual(0)
 
+  #describe "#go_away_from_other_ants", ->
+    #it "should order to ants to go away from each other", ->
+      #game.my_ants = -> [{ x: 5, y: 5 }, { x: 5, y: 6 }]
+      #game.issue_order = jasmine.createSpy()
+      #bot.go_away_from_other_ants()
+      #expect(game.issue_order.callCount).toEqual(2)
+
+  describe "#freedom", ->
+    it "should be gt father from ant", ->
+      game.my_ants = -> [{ x: 5, y: 5 }]
+      expect(bot.freedom({ x: 5, y: 6 })).toBeLessThan(bot.freedom({ x: 6, y: 6 }))
+
+    it "should be gt father from ants", ->
+      game.my_ants = -> [{ x: 5, y: 5 }, { x: 7, y: 5 }]
+      expect(bot.freedom({ x: 6, y: 6 })).toBeLessThan(bot.freedom({ x: 8, y: 6 }))
+
 
   describe "#find_path", ->
     ######################################################
